@@ -5,6 +5,15 @@ class MoviesController < ApplicationController
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
+  
+  def find_by_director
+    @movie = Movie.find(params[:movie_id])
+    if @movie.director == nil || @movie.director == ""
+      flash[:notice] = "'#{@movie.title}' has no director info"
+      redirect_to movies_path
+    end
+    @movies = Movie.find_all_by_director(@movie.director)
+  end
 
   def index
     sort = params[:sort] || session[:sort]
